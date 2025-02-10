@@ -1,13 +1,30 @@
 import { Button, Col, Form, Input, Row, Select } from "antd";
 import CardContainer from "../CardContainer/CardContainer";
+import { useCreateUser } from "../../hooks/useCreateUser";
+import { passwordSchema } from "../../utils/passWordValidate";
+import { useFetchUsers } from "../../hooks/useAllUsers";
 
 const { Option } = Select;
 
 const CreateUser = () => {
   const [form] = Form.useForm();
+  const { createUser} = useCreateUser();
+  const { fetchUsers } = useFetchUsers()
+  // enviamos los datos
+  const handleSubmit = async (data:any) => {
+       const success = await createUser(data);
+       fetchUsers()
+    if (success) form.resetFields();
+   
+  };
 
-  const handleSubmit = (data:any) => {
-    console.log("Formulario enviado:", data);
+  // Función para validar la contraseña en tiempo real
+  const validatePassword = ( _:any,value: string) => {
+    const result = passwordSchema.safeParse(value);
+    if (!result.success) {
+      return Promise.reject(result.error.errors[0].message);
+    }
+    return Promise.resolve();
   };
 
   return (
@@ -17,7 +34,7 @@ const CreateUser = () => {
           <Col span={12}>
             <Form.Item
               label="Nombre"
-              name="first_name"
+              name="name"
               rules={[{ required: true, message: "Ingrese el nombre" }]}
             >
               <Input />
@@ -47,7 +64,10 @@ const CreateUser = () => {
             <Form.Item
               label="Contraseña"
               name="password"
-              rules={[{ required: true, message: "Ingrese una contraseña" }]}
+              rules={[
+                { required: true, message: "Ingrese una contraseña" },
+                { validator: validatePassword }, // Validación en tiempo real
+              ]}
             >
               <Input.Password />
             </Form.Item>
@@ -57,26 +77,26 @@ const CreateUser = () => {
           <Col span={12}>
             <Form.Item
               label="Cargo"
-              name="role"
+              name="cargo"
               rules={[{ required: true, message: "Seleccione un cargo" }]}
             >
               <Select placeholder="Seleccione un cargo">
-                <Option value="admin">Administrador</Option>
-                <Option value="editor">Editor</Option>
-                <Option value="viewer">Visualizador</Option>
+                <Option value="rentas">Rentas</Option>
+                <Option value="Contabilidad">Contabilidad</Option>
+                <Option value="protocolista">Protocolista</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               label="Rol"
-              name="user_role"
+              name="rol"
               rules={[{ required: true, message: "Seleccione un rol" }]}
             >
               <Select placeholder="Seleccione un rol">
-                <Option value="manager">Gerente</Option>
-                <Option value="staff">Empleado</Option>
-                <Option value="intern">Practicante</Option>
+                <Option value="ADMIN">Administrador</Option>
+                <Option value="EDITOR">Editor</Option>
+                <Option value="VIEWER">Visualizador</Option>
               </Select>
             </Form.Item>
           </Col>

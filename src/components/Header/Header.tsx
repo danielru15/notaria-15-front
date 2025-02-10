@@ -3,6 +3,7 @@ import { Avatar, Layout, Typography, Flex, Dropdown, MenuProps } from "antd";
 import { LogoutOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
 import { useAuth } from "../../hooks/useAuth";
 import { ProfileDrawer } from "../profile/ProfileDrawer";
+import { getColorFromEmail, getInitial } from "../../utils/profileUtils";
 
 
 const { Header: AntHeader } = Layout;
@@ -11,17 +12,9 @@ export const Header = () => {
   const { user, logout } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Función para obtener la primera letra del primer nombre
-  const getInitial = (name: string) => {
-    return name?.trim().split(" ")[0][0].toUpperCase() || "?";
-  };
+  
 
-  // Función para generar un color único basado en el email
-  const getColorFromEmail = (email: string | any) => {
-    const colors = ["#FF5733", "#33A1FF", "#33FF57", "#FFC300", "#A833FF"];
-    const index = email ? email.charCodeAt(0) % colors.length : 0;
-    return colors[index];
-  };
+
 
   // Opciones del dropdown
   const items: MenuProps["items"] = [
@@ -63,12 +56,12 @@ export const Header = () => {
           <Dropdown menu={{ items }} placement="bottomRight">
             <Flex gap="small" style={{ alignItems: "center", cursor: "pointer" }}>
               <Avatar
-                style={{ backgroundColor: getColorFromEmail(user?.complete_name || "") }}
+                style={{ backgroundColor: getColorFromEmail(user?.name || "") }}
               >
-                {getInitial(user?.complete_name || "")}
+                {getInitial(user?.name || "")}
               </Avatar>
               <Typography.Paragraph style={{ color: "#fff", margin: 0 }}>
-                {user?.complete_name}
+                {`${user?.name} ${user?.last_name}`}
               </Typography.Paragraph>
               <DownOutlined style={{ color: "#fff" }} />
             </Flex>

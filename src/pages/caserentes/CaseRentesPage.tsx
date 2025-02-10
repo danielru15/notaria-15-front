@@ -4,7 +4,7 @@ import { BaseLayout } from "../../layout/Layout"
 
 const CaseRentesPage = () => {
   return (
-    <BaseLayout>
+    <BaseLayout breadcrumbItems={['rentas', 'casos activos']}> 
         <CreateCaseRents/>
     </BaseLayout>
 

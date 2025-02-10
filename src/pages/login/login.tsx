@@ -1,17 +1,11 @@
 import { Button, Form, Input, Typography, Alert } from "antd";
 import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
-import { z } from "zod";
+import { passwordSchema } from "../../utils/passWordValidate";
 
 const { Title } = Typography;
 
-// Esquema de validación con Zod
-const passwordSchema = z
-  .string()
-  .min(6, "La contraseña debe tener al menos 6 caracteres")
-  .regex(/[a-z]/, "Debe contener al menos una letra minúscula")
-  .regex(/[A-Z]/, "Debe contener al menos una letra mayúscula")
-  .regex(/[0-9]/, "Debe contener al menos un número");
+
 
 const Login = () => {
   const { login, error } = useAuth();
@@ -75,7 +69,7 @@ const Login = () => {
           name="password"
           rules={[
             { required: true, message: "La contraseña es obligatoria" },
-            ({ getFieldValue }) => ({
+            () => ({
               validator(_, value) {
                 const validation = passwordSchema.safeParse(value);
                 if (!validation.success) {
@@ -85,8 +79,9 @@ const Login = () => {
               },
             }),
           ]}
+          
         >
-          <Input.Password placeholder="Ingresa tu contraseña" />
+          <Input.Password  placeholder="Ingresa tu contraseña" />
         </Form.Item>
 
         <Form.Item>

@@ -1,12 +1,8 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { notaria15Api } from "../api/notaria.api";
 import { Button, notification } from "antd";
-
-// Definir los tipos para el usuario y el contexto de autenticación
-interface User {
-  complete_name: string;
-}
+import { User } from "../interfaces/user.interface";
 
 interface AuthContextType {
   user: User | null;
@@ -14,90 +10,94 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   error?: string | null;
+  Allusers: User[];
+  setAllUsers: (users: User[]) => void;
 }
-// Mostrar notificación de sesión por expirar con botón de confirmación
+
 const closeNotification = () => {
   notification.destroy();
 };
-// Crear el contexto de autenticación
+
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [Allusers, setAllUsers] = useState<User[]>([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Verifica autenticación y token al iniciar
   useEffect(() => {
+    if (location.pathname === "/login") {
+      if (user) {
+        navigate("/usuarios", { replace: true });
+      }
+      setLoading(false);
+      return;
+    }
+
     const checkAuth = async () => {
       try {
         const { data } = await notaria15Api.get("/users/profile");
-        setUser({ complete_name: `${data.user.name} ${data.user.last_name}` });
+        if (!data?.user) {
+          logout();
+          return;
+        }
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Gestionar expiración del token
-        manageTokenExpiration(data.token);
+        // Recuperar expiración del token almacenado en localStorage
+        const storedExpirationTime = localStorage.getItem("tokenExpirationTime");
+        if (storedExpirationTime) {
+          manageTokenExpiration(parseInt(storedExpirationTime, 10));
+        }
       } catch {
-        setUser(null);
+        logout();
       } finally {
         setLoading(false);
       }
     };
+
     checkAuth();
-  }, []);
+  }, [location.pathname]);
 
-  // Función para manejar la expiración del token
-const manageTokenExpiration = (token: string) => {
-  if (!token) return;
-
-  try {
-    const tokenPayload = JSON.parse(atob(token.split(".")[1])); // Decodificar el token
-    const expirationTime = tokenPayload.exp * 1000; // Convertir a milisegundos
-    const currentTime = Date.now();
-    const timeUntilExpiration = expirationTime - currentTime;
-    const warningTime = 5 * 60 * 1000; // 5 minutos antes de expirar
+  const manageTokenExpiration = (expirationTime: number) => {
+    const warningTime = 5 * 60 * 1000;
+    const timeUntilExpiration = expirationTime - Date.now();
 
     if (timeUntilExpiration > warningTime) {
-      // Mostrar notificación 5 minutos antes de expirar
       setTimeout(() => {
         notification.warning({
           message: "Sesión por expirar",
-          description: "Tu sesión expirará en 5 minutos. Guarda tu trabajo y vuelve a iniciar sesión.",
-          duration: 0, // Mantener la notificación hasta que el usuario la cierre
-          btn: (
-            <Button type="primary" size="small" onClick={closeNotification}>
-              OK
-            </Button>
-          ),
+          description: "Tu sesión expirará en 5 minutos. Guarda tu trabajo.",
+          duration: 0,
+          btn: <Button type="primary" size="small" onClick={closeNotification}>OK</Button>,
         });
       }, timeUntilExpiration - warningTime);
     }
 
-    // Cerrar sesión automáticamente cuando expire
-    setTimeout(() => {
-      logout();
-    }, timeUntilExpiration);
-  } catch (error) {
-    console.error("Error al manejar la expiración del token:", error);
-  }
-};
+    setTimeout(logout, timeUntilExpiration);
+  };
 
-  // Redirigir al login si no hay usuario autenticado
-  useEffect(() => {
-    if (!loading && user === null) {
-      navigate("/login", { replace: true });
-    }
-  }, [user, loading, navigate]);
-
-  // Función para iniciar sesión
   const login = async (email: string, password: string) => {
     setError(null);
     try {
       const { data } = await notaria15Api.post("/users/login", { email, password });
-      setUser({ complete_name: `${data.user.name} ${data.user.last_name}` });
-      console.log(data)
-      // Manejar expiración del token
-      manageTokenExpiration(data.token);
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Extraemos la expiración del token y la guardamos en localStorage
+      const tokenPayload = JSON.parse(atob(data.token.split(".")[1]));
+      const expirationTime = tokenPayload.exp * 1000;
+      localStorage.setItem("tokenExpirationTime", expirationTime.toString());
+
+      // Configuramos la expiración
+      manageTokenExpiration(expirationTime);
 
       navigate("/usuarios", { replace: true });
     } catch {
@@ -105,22 +105,22 @@ const manageTokenExpiration = (token: string) => {
     }
   };
 
-  // Función para cerrar sesión
   const logout = async () => {
     try {
       await notaria15Api.post("/users/logout");
-      setUser(null);
-      navigate("/login", { replace: true });
     } catch {
       console.error("Error al cerrar sesión");
     }
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("tokenExpirationTime");
+    navigate("/login", { replace: true });
   };
 
-  // Mostrar carga hasta que se verifique la autenticación
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, error }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, error, Allusers, setAllUsers }}>
       {children}
     </AuthContext.Provider>
   );

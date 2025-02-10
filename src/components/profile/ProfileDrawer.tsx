@@ -1,19 +1,38 @@
-import { Drawer, Descriptions } from "antd";
+import { Drawer, Descriptions, Avatar, Typography, Flex, Divider } from "antd";
+import { User } from "../../interfaces/user.interface";
+import { getColorFromEmail, getInitial } from "../../utils/profileUtils";
 
 interface ProfileDrawerProps {
   open: boolean;
   onClose: () => void;
-  user: { complete_name: string } | null;
+  user: User | null;
 }
 
 export const ProfileDrawer = ({ open, onClose, user }: ProfileDrawerProps) => {
+  
+
   return (
-    <Drawer  width={720} title="Perfil de Usuario" placement="right" onClose={onClose} open={open}>
+    <Drawer width={420} title="Perfil de Usuario" placement="right" onClose={onClose} open={open}>
+      <Flex align="center" justify="center" vertical>
+        {/* Avatar con iniciales */}
+            <Avatar
+            size={80}
+            style={{ backgroundColor: getColorFromEmail(user?.name || "") }}>
+                {getInitial(user?.name || "")}
+            </Avatar>
+
+        <Typography.Title level={4} style={{ marginTop: 12 }}>
+          {user?.name} {user?.last_name}
+        </Typography.Title>
+        <Typography.Text type="secondary">{user?.email}</Typography.Text>
+      </Flex>
+
+      <Divider />
+
       <Descriptions column={1} bordered>
-        <Descriptions.Item label="Nombre Completo">
-          {user?.complete_name || "No disponible"}
-        </Descriptions.Item>
-        {/* Puedes agregar más información aquí si la tienes */}
+        <Descriptions.Item label="Rol">{user?.rol || "No disponible"}</Descriptions.Item>
+        <Descriptions.Item label="Cargo">{user?.cargo || "No disponible"}</Descriptions.Item>
+        <Descriptions.Item label="Fecha de Creación">{user?.created_at || "No disponible"}</Descriptions.Item>
       </Descriptions>
     </Drawer>
   );
