@@ -1,18 +1,21 @@
+import  { useState } from 'react';
 import { Button, Space, Table, TableProps, Modal, Input } from "antd";
-import { useFetchUsers } from "../../hooks/useAllUsers";
+import { useFetchUsers } from "../../hooks/users/useAllUsers";
 import CardContainer from "../CardContainer/CardContainer";
 import { User } from "../../interfaces/user.interface";
-import { useDeleteUser } from "../../hooks/deleteUser";
+import { useDeleteUser } from "../../hooks/users/deleteUser";
 import { ExclamationCircleFilled } from "@ant-design/icons";
+import EditUserDrawer from "./EditUser";
+import ProtectedRoutes from '../protectRoutes/ProtectRoutes';
+import { useAuth } from '../../hooks/users/useAuth';
 
 const CONFIRMATION_WORD = "ELIMINAR"; // Palabra de confirmación
 
 const ListUsers = () => {
   const { Allusers , fetchUsers } = useFetchUsers();
   const { deleteUser } = useDeleteUser();
-
-
-
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+ const { user } = useAuth();
   const showDeleteModal = (id: number) => {
     let inputValue = "";
     let modalInstance: any = null;
@@ -43,13 +46,11 @@ const ListUsers = () => {
       onOk: async () => {
         if (inputValue === CONFIRMATION_WORD) {
           await deleteUser(id, inputValue);
-          fetchUsers()
+          fetchUsers();
         }
       },
     });
   };
-
-  
 
   const columns: TableProps<User>["columns"] = [
     { title: "Id", dataIndex: "id", key: "id" },
@@ -93,23 +94,29 @@ const ListUsers = () => {
       key: "created_at",
       render: (created_at: string) => new Date(created_at).toLocaleString(),
     },
-    {
-      title: "Acciones",
-      key: "actions",
-      render: (_: any, record: any) => (
-        <Space>
-          <Button type="link">Editar</Button>
-          <Button type="link" style={{ color: "red" }} onClick={() => showDeleteModal(record.id)}>
-            Eliminar
-          </Button>
-        </Space>
-      ),
-    },
+    
+    ...(user?.rol !== "VIEWER"  ? [
+      {
+        title: "Acciones",
+        key: "actions",
+        render: (_: any, record: any) => (
+          <Space>
+            <Button type="link" onClick={() => setSelectedUser(record)}>Editar</Button>
+            <ProtectedRoutes roles={["ADMIN"]}>
+              <Button type="link" style={{ color: "red" }} onClick={() => showDeleteModal(record.id)}>
+                Eliminar
+              </Button>
+            </ProtectedRoutes>
+          </Space>
+        ),
+      }
+    ] : []),
   ];
 
   return (
     <CardContainer title="TODOS LOS USUARIOS">
-      <Table<User> columns={columns} dataSource={Allusers} rowKey={(record) => record.id}/>
+      <Table<User> columns={columns} dataSource={Allusers} rowKey={(record) => record.id} />
+      {selectedUser && <EditUserDrawer user={selectedUser} onClose={() => setSelectedUser(null)} />}
     </CardContainer>
   );
 };

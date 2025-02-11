@@ -1,5 +1,5 @@
 import { Button, Form, Input, Typography, Alert } from "antd";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/users/useAuth";
 import { useState } from "react";
 import { passwordSchema } from "../../utils/passWordValidate";
 

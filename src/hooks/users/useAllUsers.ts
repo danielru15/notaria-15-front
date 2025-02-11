@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { notaria15Api } from "../api/notaria.api";
-import { User } from "../interfaces/user.interface";
+import { notaria15Api } from "../../api/notaria.api";
+import { User } from "../../interfaces/user.interface";
 import { useAuth } from "./useAuth";
 
 export const useFetchUsers = () => {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Avatar, Layout, Typography, Flex, Dropdown, MenuProps } from "antd";
 import { LogoutOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/users/useAuth";
 import { ProfileDrawer } from "../profile/ProfileDrawer";
 import { getColorFromEmail, getInitial } from "../../utils/profileUtils";
 

@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     checkAuth();
-  }, []);
+  }, [location.pathname]);
 
   const manageTokenExpiration = (expirationTime: number) => {
     const warningTime = 5 * 60 * 1000;

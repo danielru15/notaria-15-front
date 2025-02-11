@@ -4,7 +4,7 @@ import UsuariosPage from "./pages/usuarios/UsuariosPage";
 import CaseRentesPage from "./pages/caserentes/CaseRentesPage";
 import CaseFinished from "./pages/caserentes/CaseFinished";
 import Login from "./pages/login/login";
-import { useAuth } from "./hooks/useAuth";
+import { useAuth } from "./hooks/users/useAuth";
 import "./index.css";
 const App = () => {
   const {  loading } = useAuth();

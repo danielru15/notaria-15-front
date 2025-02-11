@@ -1,4 +1,4 @@
-import { notaria15Api } from "../api/notaria.api";
+import { notaria15Api } from "../../api/notaria.api";
 import { notification } from "antd";
 
 export const useDeleteUser = () => {
