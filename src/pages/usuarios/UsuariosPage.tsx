@@ -1,4 +1,5 @@
 
+import UserCard from '../../components/usuarios/a'
 import CreateUser from '../../components/usuarios/CreateUser'
 import ListUsers from '../../components/usuarios/ListUsers'
 import { BaseLayout } from '../../layout/Layout'

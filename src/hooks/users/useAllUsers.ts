@@ -26,5 +26,5 @@ export const useFetchUsers = () => {
     fetchUsers();
   }, [fetchUsers]);
 
-  return { Allusers, loading, error, fetchUsers }; // 🔹 Retorna `fetchUsers`
+  return { Allusers, loading, error, fetchUsers }; //  Retorna `fetchUsers`
 };

@@ -3,7 +3,7 @@ import { Avatar, Layout, Typography, Flex, Dropdown, MenuProps } from "antd";
 import { LogoutOutlined, UserOutlined, DownOutlined } from "@ant-design/icons";
 import { useAuth } from "../../hooks/users/useAuth";
 import { ProfileDrawer } from "../profile/ProfileDrawer";
-import { getColorFromEmail, getInitial } from "../../utils/profileUtils";
+import { capitalizeFirstLetter, getColorFromEmail, getInitial } from "../../utils/profileUtils";
 
 
 const { Header: AntHeader } = Layout;
@@ -61,7 +61,7 @@ export const Header = () => {
                 {getInitial(user?.name || "")}
               </Avatar>
               <Typography.Paragraph style={{ color: "#fff", margin: 0 }}>
-                {`${user?.name} ${user?.last_name}`}
+                {`${capitalizeFirstLetter(user?.name)} ${capitalizeFirstLetter(user?.last_name)}`}
               </Typography.Paragraph>
               <DownOutlined style={{ color: "#fff" }} />
             </Flex>

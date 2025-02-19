@@ -1,3 +1,5 @@
+
+
 // Función para obtener la primera letra del primer nombre
 export const getInitial = (name: string) => {
     return name?.trim().split(" ")[0][0].toUpperCase() || "?";
@@ -9,3 +11,9 @@ export const getColorFromEmail = (email: string | any) => {
       const index = email ? email.charCodeAt(0) % colors.length : 0;
       return colors[index];
     };
+
+export  const capitalizeFirstLetter = (str: string | undefined) => {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    };
+

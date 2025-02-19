@@ -1,47 +1,54 @@
 import {
-    HomeOutlined,
-    DatabaseOutlined,
-    UserOutlined,
-    FileSearchOutlined,
-  } from "@ant-design/icons";
-  import { Menu } from "antd";
-  
-  const menuItems = [
-    { key: "1", icon: <HomeOutlined />, label: <a href="/home">Gestión de Rentas (Inicio)</a> },
-    {
-      key: "2",
-      icon: <DatabaseOutlined />,
-      label: "Rentas",
-      children: [
-        { key: "2.1", label: <a href="/caso-rentas">Radicados de Rentas</a> },
-        { key: "2.2", label: <a href="/caso-rentas-finalizados">Casos Finalizados</a> },
-      ],
-    },
-    {
-      key: "3",
-      icon: <UserOutlined />,
-      label: <a href="/usuarios">Usuarios</a> ,
-      
-    },
-    {
-      key: "4",
-      icon: <FileSearchOutlined />,
-      label: "Rentas y Registro",
-      children: [
-        { key: "4.1", label: <a href="/Facturas">Facturas</a> },
-        { key: "4.2", label: <a href="/Data">data</a> },
-        { key: "4.3", label: "Campo disponible" },
-      ],
-    }
-  ];
-  
-  export const Sidebar = () => (
+  HomeOutlined,
+  DatabaseOutlined,
+  UserOutlined,
+  FileSearchOutlined,
+} from "@ant-design/icons";
+import { Menu } from "antd";
+import { NavLink, useLocation } from "react-router-dom";
+
+const menuItems = [
+  {
+    key: "/home",
+    icon: <HomeOutlined />,
+    label: <NavLink to="/home">Inicio</NavLink>,
+  },
+  {
+    key: "/caso-rentas",
+    icon: <DatabaseOutlined />,
+    label: "Rentas",
+    children: [
+      { key: "/caso-rentas-activos", label: <NavLink to="/caso-rentas">Radicados de Rentas</NavLink> },
+      { key: "/caso-rentas-finalizados", label: <NavLink to="/caso-rentas-finalizados">Casos Finalizados</NavLink> },
+    ],
+  },
+  {
+    key: "/usuarios",
+    icon: <UserOutlined />,
+    label: <NavLink to="/usuarios">Usuarios</NavLink>,
+  },
+  {
+    key: "/rentas-registro",
+    icon: <FileSearchOutlined />,
+    label: "Rentas y Registro",
+    children: [
+      { key: "/facturas", label: <NavLink to="/facturas">Facturas</NavLink> },
+      { key: "/data", label: <NavLink to="/data">Data</NavLink> },
+      { key: "campo-disponible", label: "Campo disponible" },
+    ],
+  }
+];
+
+export const Sidebar: React.FC = () => {
+  const location = useLocation(); // Obtener la ruta actual
+
+  return (
     <Menu
       theme="light"
-      defaultSelectedKeys={["1"]}
       mode="inline"
+      selectedKeys={[location.pathname]} // Resalta el menú activo
       items={menuItems}
       style={{ backgroundColor: "#FFFFFF", fontWeight: "500" }}
     />
   );
-  
+};

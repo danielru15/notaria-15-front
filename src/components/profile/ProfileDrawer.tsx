@@ -1,6 +1,7 @@
 import { Drawer, Descriptions, Avatar, Typography, Flex, Divider } from "antd";
 import { User } from "../../interfaces/user.interface";
 import { getColorFromEmail, getInitial } from "../../utils/profileUtils";
+import dayjs from "dayjs";
 
 interface ProfileDrawerProps {
   open: boolean;
@@ -32,7 +33,7 @@ export const ProfileDrawer = ({ open, onClose, user }: ProfileDrawerProps) => {
       <Descriptions column={1} bordered>
         <Descriptions.Item label="Rol">{user?.rol || "No disponible"}</Descriptions.Item>
         <Descriptions.Item label="Cargo">{user?.cargo || "No disponible"}</Descriptions.Item>
-        <Descriptions.Item label="Fecha de Creación">{user?.created_at || "No disponible"}</Descriptions.Item>
+        <Descriptions.Item label="Fecha de Creación">{dayjs(user?.created_at).format("DD-MM-YYYY")}</Descriptions.Item>
       </Descriptions>
     </Drawer>
   );

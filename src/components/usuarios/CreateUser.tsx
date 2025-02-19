@@ -4,19 +4,29 @@ import { useCreateUser } from "../../hooks/users/useCreateUser";
 import { passwordSchema } from "../../utils/passWordValidate";
 import { useFetchUsers } from "../../hooks/users/useAllUsers";
 import ProtectedRoutes from "../protectRoutes/ProtectRoutes";
+import { userCreateValidate } from "../../utils/userValidate"; // Asegúrate de tener esto para las validaciones
+import { validateField } from "../../utils/validateFields";
 
 const { Option } = Select;
 
 const CreateUser = () => {
   const [form] = Form.useForm();
   const { createUser} = useCreateUser();
-  const { fetchUsers } = useFetchUsers()
+  const { fetchUsers } = useFetchUsers();
+  
   // enviamos los datos
   const handleSubmit = async (data:any) => {
-       const success = await createUser(data);
-       fetchUsers()
-    if (success) form.resetFields();
-   
+    try {
+      // Validar los datos con Zod
+      userCreateValidate.parse(data);
+      
+      const success = await createUser(data);
+      fetchUsers();
+      
+      if (success) form.resetFields();
+    } catch (error) {
+      console.error("Error al validar/enviar formulario:", error);
+    }
   };
 
   // Función para validar la contraseña en tiempo real
@@ -37,7 +47,13 @@ const CreateUser = () => {
               <Form.Item
                 label="Nombre"
                 name="name"
-                rules={[{ required: true, message: "Ingrese el nombre" }]}
+                rules={[
+                  { required: true, message: "Ingrese el nombre" },
+                  {
+                    validator: (_, value) =>
+                      validateField(userCreateValidate.shape.name, value),
+                  },
+                ]}
               >
                 <Input />
               </Form.Item>
@@ -46,7 +62,13 @@ const CreateUser = () => {
               <Form.Item
                 label="Apellido"
                 name="last_name"
-                rules={[{ required: true, message: "Ingrese el apellido" }]}
+                rules={[
+                  { required: true, message: "Ingrese el apellido" },
+                  {
+                    validator: (_, value) =>
+                      validateField(userCreateValidate.shape.last_name, value),
+                  },
+                ]}
               >
                 <Input />
               </Form.Item>
@@ -57,7 +79,13 @@ const CreateUser = () => {
               <Form.Item
                 label="Correo Electrónico"
                 name="email"
-                rules={[{ required: true, type: "email", message: "Ingrese un correo electrónico válido" }]}
+                rules={[
+                  { required: true, type: "email", message: "Ingrese un correo electrónico válido" },
+                  {
+                    validator: (_, value) =>
+                      validateField(userCreateValidate.shape.email, value),
+                  },
+                ]}
               >
                 <Input />
               </Form.Item>
@@ -80,7 +108,13 @@ const CreateUser = () => {
               <Form.Item
                 label="Cargo"
                 name="cargo"
-                rules={[{ required: true, message: "Seleccione un cargo" }]}
+                rules={[
+                  { required: true, message: "Seleccione un cargo" },
+                  {
+                    validator: (_, value) =>
+                      validateField(userCreateValidate.shape.cargo, value),
+                  },
+                ]}
               >
                 <Select placeholder="Seleccione un cargo">
                   <Option value="rentas">Rentas</Option>
@@ -93,7 +127,13 @@ const CreateUser = () => {
               <Form.Item
                 label="Rol"
                 name="rol"
-                rules={[{ required: true, message: "Seleccione un rol" }]}
+                rules={[
+                  { required: true, message: "Seleccione un rol" },
+                  {
+                    validator: (_, value) =>
+                      validateField(userCreateValidate.shape.rol, value),
+                  },
+                ]}
               >
                 <Select placeholder="Seleccione un rol">
                   <Option value="ADMIN">Administrador</Option>

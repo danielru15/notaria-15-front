@@ -39,7 +39,7 @@ const Login = () => {
       }}
     >
       <Title level={2} style={{ marginBottom: "1.5rem", color: "#16A34A" }}>
-        Bienvenido(a) al Sistema Notarial
+        Bienvenido(a) al Sistema de Gestion Notarial
       </Title>
         
       {error && <Alert message={error} type="error" showIcon style={{ marginBottom: "1rem" }} />}

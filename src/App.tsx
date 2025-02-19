@@ -6,6 +6,7 @@ import CaseFinished from "./pages/caserentes/CaseFinished";
 import Login from "./pages/login/login";
 import { useAuth } from "./hooks/users/useAuth";
 import "./index.css";
+
 const App = () => {
   const {  loading } = useAuth();
 
@@ -38,14 +39,24 @@ const App = () => {
             colorBgTextHover: "#D1FAE5",
           },
           Button: {
-            borderRadius: 4,
+            borderRadius: 0,
             colorPrimaryBg: "#16A34A",
             colorPrimaryHover: "#34D399",
           },
           Dropdown: {
+            controlItemBgHover:"#D1FAE5",
+          },
+          Table: {
+            headerBg:"#16A34A",
+            headerColor:"white",
+            rowHoverBg:"#D1FAE5",
+            
+          },
+          Menu: {
             colorBgContainer: "#F0FFF4",
             colorBgTextHover: "#D1FAE5",
-          },
+            itemActiveBg:"#16A34A"
+          }
         },
       }}
     >

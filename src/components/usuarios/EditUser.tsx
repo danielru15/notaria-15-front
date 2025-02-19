@@ -61,8 +61,9 @@ const EditUserDrawer: React.FC<EditUserDrawerProps> = ({ user, onClose }) => {
           <Col span={12}>
             <Form.Item name="rol" label="Rol">
               <Select>
-                <Option value="admin">Admin</Option>
-                <Option value="user">Usuario</Option>
+                <Option value="ADMIN">Admin</Option>
+                <Option value="EDITOR">Editor</Option>
+                <Option value="VIEWER">Viewer</Option>
               </Select>
             </Form.Item>
           </Col>
