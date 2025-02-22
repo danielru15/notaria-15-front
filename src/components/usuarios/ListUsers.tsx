@@ -1,13 +1,14 @@
 import  { useState } from 'react';
-import { Button, Space, Table, TableProps, Modal, Input } from "antd";
+import { Button, Space, Table, TableProps, Modal, Input, Tag } from "antd";
 import { useFetchUsers } from "../../hooks/users/useAllUsers";
 import CardContainer from "../CardContainer/CardContainer";
 import { User } from "../../interfaces/user.interface";
 import { useDeleteUser } from "../../hooks/users/deleteUser";
-import { ExclamationCircleFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, FilterFilled, FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import EditUserDrawer from "./EditUser";
 import ProtectedRoutes from '../protectRoutes/ProtectRoutes';
 import { useAuth } from '../../hooks/users/useAuth';
+import ReusableTable from '../Table/Table';
 
 
 const CONFIRMATION_WORD = "ELIMINAR"; // Palabra de confirmación
@@ -66,6 +67,10 @@ const ListUsers = () => {
         value: name,
       })),
       render: (name: string) => name.toUpperCase(),
+      filterIcon: (filtered: boolean) => (
+   
+        <FilterFilled style={{ color: filtered ? '#ffffff' : '' }} />
+      ),
     },
     {
       title: "Apellido",
@@ -78,6 +83,10 @@ const ListUsers = () => {
         value: last_name,
       })),
       render: (last_name: string) => last_name.toUpperCase(),
+      filterIcon: (filtered: boolean) => (
+   
+        <FilterFilled style={{ color: filtered ? '#ffffff' : '' }} />
+      )
     },
     { title: "Correo Electrónico", dataIndex: "email", key: "email" },
     {
@@ -86,9 +95,55 @@ const ListUsers = () => {
       key: "cargo",
       filterSearch: true,
       onFilter: (value: any, record: any) => record.cargo.toLowerCase().includes(value.toLowerCase()),
-      filters: Allusers.map(({ cargo }) => ({ text: cargo.toLowerCase(), value: cargo })),
+      filters: Array.from(new Set(Allusers.map(({ cargo }) => cargo.toLowerCase()))).map(cargo => ({
+        text: cargo.toUpperCase(),
+        value: cargo,
+      })),
+      filterIcon: (filtered: boolean) => (
+   
+        <FilterFilled style={{ color: filtered ? '#ffffff' : '' }} />
+      )
     },
-    { title: "Rol", dataIndex: "rol", key: "rol" },
+    {
+      
+      title: "Rol",
+      dataIndex: "rol",
+      key: "rol",
+      render: (rol: string | string[]) => {
+        // Si rol es un string, lo convertimos en array para manejarlo uniformemente
+        const roles = Array.isArray(rol) ? rol : [rol];
+      
+        return (
+          <>
+            {roles.map((role) => {
+              // Inicializamos el color para el rol
+              let color: string;
+              
+              switch (role.toLowerCase()) {
+                case "admin":
+                  color = "green";
+                  break;
+                case "viewer":
+                  color = "blue";
+                  break;
+                case "editor":
+                  color = "purple";
+                  break;
+                default:
+                  color = "geekblue"; // Este caso ya no debería activarse si solo tienes esos tres roles
+              }
+      
+              return (
+                <Tag color={color} key={role}>
+                  {role.toUpperCase()}
+                </Tag>
+              );
+            })}
+          </>
+        );
+      }
+      ,
+    },
     {
       title: "Fecha de Creación",
       dataIndex: "created_at",
@@ -102,9 +157,9 @@ const ListUsers = () => {
         key: "actions",
         render: (_: any, record: any) => (
           <Space>
-            <Button type="link" onClick={() => setSelectedUser(record)}>Editar</Button>
+            <Button variant='solid'  icon={<EditOutlined />} onClick={() => setSelectedUser(record)}>Editar</Button>
             <ProtectedRoutes roles={["ADMIN"]}>
-              <Button type="link" style={{ color: "red" }} onClick={() => showDeleteModal(record.id)}>
+              <Button type="primary" danger icon={<DeleteOutlined />}  onClick={() => showDeleteModal(record.id)}>
                 Eliminar
               </Button>
             </ProtectedRoutes>
@@ -116,7 +171,11 @@ const ListUsers = () => {
 
   return (
     <CardContainer title="TODOS LOS USUARIOS">
-      <Table<User> columns={columns} dataSource={Allusers} rowKey={(record) => record.id} />
+  
+      <ReusableTable
+        columns={columns} 
+        dataSource={Allusers}
+      />
       {selectedUser && <EditUserDrawer user={selectedUser} onClose={() => setSelectedUser(null)} />}
     </CardContainer>
   );

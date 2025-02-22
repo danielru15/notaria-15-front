@@ -1,11 +1,12 @@
 import { Button, Col, Form, Input, Row, Select } from "antd";
 import CardContainer from "../CardContainer/CardContainer";
 import { useCreateUser } from "../../hooks/users/useCreateUser";
-import { passwordSchema } from "../../utils/passWordValidate";
 import { useFetchUsers } from "../../hooks/users/useAllUsers";
-import ProtectedRoutes from "../protectRoutes/ProtectRoutes";
 import { userCreateValidate } from "../../utils/userValidate"; // Asegúrate de tener esto para las validaciones
 import { validateField } from "../../utils/validateFields";
+import { UserAddOutlined } from "@ant-design/icons";
+import { validatePassword } from "../../utils/profileUtils";
+import ActionButtons from "../CardContainer/CardButton";
 
 const { Option } = Select;
 
@@ -29,19 +30,13 @@ const CreateUser = () => {
     }
   };
 
-  // Función para validar la contraseña en tiempo real
-  const validatePassword = ( _:any,value: string) => {
-    const result = passwordSchema.safeParse(value);
-    if (!result.success) {
-      return Promise.reject(result.error.errors[0].message);
-    }
-    return Promise.resolve();
-  };
+ 
 
   return (
-    <ProtectedRoutes roles={["ADMIN", "EDITOR"]}>
-      <CardContainer title="CREAR USUARIOS">
+   
+      
         <Form layout="vertical" form={form} onFinish={handleSubmit}>
+          <CardContainer title="CREAR USUARIOS">
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -150,14 +145,14 @@ const CreateUser = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
+          </CardContainer>
+          <ActionButtons>
+            <Button type="default" onClick={() => form.resetFields()}>Restablecer</Button>
+            <Button type="primary" icon={<UserAddOutlined />} htmlType="submit">
               Agregar Usuario
             </Button>
-          </Form.Item>
+          </ActionButtons>
         </Form>
-      </CardContainer>
-    </ProtectedRoutes>
   );
 };
 

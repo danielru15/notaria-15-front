@@ -2,7 +2,6 @@ import { ConfigProvider } from "antd";
 import { Route, Routes } from "react-router-dom";
 import UsuariosPage from "./pages/usuarios/UsuariosPage";
 import CaseRentesPage from "./pages/caserentes/CaseRentesPage";
-import CaseFinished from "./pages/caserentes/CaseFinished";
 import Login from "./pages/login/login";
 import { useAuth } from "./hooks/users/useAuth";
 import "./index.css";
@@ -39,7 +38,7 @@ const App = () => {
             colorBgTextHover: "#D1FAE5",
           },
           Button: {
-            borderRadius: 0,
+            borderRadius: 4,
             colorPrimaryBg: "#16A34A",
             colorPrimaryHover: "#34D399",
           },
@@ -50,12 +49,22 @@ const App = () => {
             headerBg:"#16A34A",
             headerColor:"white",
             rowHoverBg:"#D1FAE5",
-            
+            borderColor:"#afafaf",
+            cellFontSize:16,
+            headerBorderRadius:0
           },
           Menu: {
             colorBgContainer: "#F0FFF4",
             colorBgTextHover: "#D1FAE5",
-            itemActiveBg:"#16A34A"
+            itemActiveBg:"#16A34A",
+            itemBorderRadius:0,
+            
+          },
+          Pagination: {
+            itemActiveBg: "#34d399c3", 
+            itemSize: 36, 
+            colorBgTextHover: "#D1FAE5", 
+            itemBg:'#D1FAE5'
           }
         },
       }}
@@ -63,7 +72,6 @@ const App = () => {
       <Routes>
         <Route path="/usuarios" element={<UsuariosPage />} />
         <Route path="/caso-rentas" element={<CaseRentesPage />} />
-        <Route path="/caso-rentas-finalizados" element={<CaseFinished />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </ConfigProvider>

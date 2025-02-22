@@ -12,6 +12,8 @@ interface AuthContextType {
   error?: string | null;
   Allusers: User[];
   setAllUsers: (users: User[]) => void;
+  passwordChanged?: boolean;
+  setPasswordChanged: (boolean:boolean) => void
 }
 
 const closeNotification = () => {
@@ -28,6 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [passwordChanged , setPasswordChanged ] = useState<boolean>(false);
   const [Allusers, setAllUsers] = useState<User[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -119,7 +122,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   if (loading) return <div>Cargando...</div>;
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, error, Allusers, setAllUsers }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, error, Allusers, setAllUsers, passwordChanged , setPasswordChanged }}>
       {children}
     </AuthContext.Provider>
   );

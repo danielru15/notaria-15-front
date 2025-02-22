@@ -11,8 +11,8 @@ export const casoRentasSchema = z.object({
     .int()
     .positive("El ID del usuario debe ser un número positivo."),
   fecha: z.string()
-    .refine((date) => date < today, {
-      message: "La fecha debe ser menor a la fecha de hoy.",
+    .refine((date) => date <= today, {
+      message: "La fecha debe ser menor o igual a la fecha de hoy.",
     }),
   radicado: z.string()
     .min(1, "El radicado es obligatorio.")

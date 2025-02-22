@@ -45,19 +45,24 @@ const EditUserDrawer: React.FC<EditUserDrawerProps> = ({ user, onClose }) => {
       }
     >
       <Form form={form} layout="vertical" initialValues={user}>
-        <Row gutter={16}>
+      <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="name" label="Nombre">
               <Input readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item name="email" label="Correo Electrónico">
+            <Form.Item name="last_name" label="Apellido">
               <Input readOnly />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name="email" label="Correo Electrónico">
+              <Input readOnly />
+            </Form.Item>
+          </Col>
           <Col span={12}>
             <Form.Item name="rol" label="Rol">
               <Select>
@@ -67,19 +72,20 @@ const EditUserDrawer: React.FC<EditUserDrawerProps> = ({ user, onClose }) => {
               </Select>
             </Form.Item>
           </Col>
+        </Row>
+        <Row gutter={16}>
           <Col span={12}>
             <Form.Item name="cargo" label="Cargo">
               <Input />
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
+          <Col span={12}>
             <Form.Item name="description" label="Descripción">
               <Input.TextArea rows={4} readOnly />
             </Form.Item>
           </Col>
         </Row>
+        
       </Form>
     </Drawer>
   );

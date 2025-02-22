@@ -4,7 +4,7 @@ import { BaseLayout } from "../../layout/Layout"
 
 const EscriturasPage = () => {
   return (
-    <BaseLayout breadcrumbItems={['Escrituras', 'Gestion de Escrituras']}>
+    <BaseLayout breadcrumbItems={['Escrituras', 'Gestion de Escrituras']} tituloPagina="Escrituras">
         <ListEscrituras/>
     </BaseLayout>
   )

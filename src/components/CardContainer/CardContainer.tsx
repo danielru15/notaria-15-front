@@ -5,11 +5,12 @@ import React, { ReactNode } from "react";
 interface CardProps {
     children: ReactNode;
     title:string
+    
   }
 
 const CardContainer:React.FC<CardProps> = ({children, title}) => {
   return (
-    <Card className="card-glass" title={<Title level={5}>{title}</Title>}>
+    <Card  title={<Title level={5}>{title}</Title>}>
     {children}
     </Card>
   )

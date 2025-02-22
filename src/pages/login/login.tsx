@@ -8,13 +8,13 @@ const { Title } = Typography;
 
 
 const Login = () => {
-  const { login, error } = useAuth();
+  const { login, error , passwordChanged , setPasswordChanged } = useAuth();
   const [loading, setLoading] = useState(false);
 
 
   const onFinish = async (values: { email: string; password: string }) => {
     setLoading(true);
-    
+    setPasswordChanged(false)
 
     try {
       await login(values.email, values.password);
@@ -41,7 +41,14 @@ const Login = () => {
       <Title level={2} style={{ marginBottom: "1.5rem", color: "#16A34A" }}>
         Bienvenido(a) al Sistema de Gestion Notarial
       </Title>
-        
+      {passwordChanged && (
+        <Alert
+          message="Tu contraseña ha sido cambiada. Por favor, inicia sesión con tus nuevas credenciales."
+          type="info"
+          showIcon
+          style={{ marginBottom: "1rem" }}
+        />
+      )}
       {error && <Alert message={error} type="error" showIcon style={{ marginBottom: "1rem" }} />}
       <Form
         layout="vertical"

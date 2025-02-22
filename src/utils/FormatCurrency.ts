@@ -4,3 +4,7 @@
       currency: "COP",
     }).format(value);
   };
+
+  export const formatNumber = (number: number) => {
+    return number.toLocaleString('es-CO');
+  }

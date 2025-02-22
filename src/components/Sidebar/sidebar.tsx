@@ -1,8 +1,8 @@
 import {
   HomeOutlined,
-  DatabaseOutlined,
-  UserOutlined,
   FileSearchOutlined,
+  FileOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
@@ -15,16 +15,12 @@ const menuItems = [
   },
   {
     key: "/caso-rentas",
-    icon: <DatabaseOutlined />,
-    label: "Rentas",
-    children: [
-      { key: "/caso-rentas-activos", label: <NavLink to="/caso-rentas">Radicados de Rentas</NavLink> },
-      { key: "/caso-rentas-finalizados", label: <NavLink to="/caso-rentas-finalizados">Casos Finalizados</NavLink> },
-    ],
+    icon:<FileOutlined />,
+    label: <NavLink to="/caso-rentas">Radicados de Rentas</NavLink> 
   },
   {
     key: "/usuarios",
-    icon: <UserOutlined />,
+    icon: <TeamOutlined />,
     label: <NavLink to="/usuarios">Usuarios</NavLink>,
   },
   {
@@ -47,7 +43,14 @@ export const Sidebar: React.FC = () => {
       theme="light"
       mode="inline"
       selectedKeys={[location.pathname]} // Resalta el menú activo
-      items={menuItems}
+      items={menuItems.map(item => ({
+        ...item,
+        style: location.pathname === item.key ? { borderRight: '4px solid #065F46' } : {},
+        children: item.children?.map(child => ({
+          ...child,
+          style: location.pathname === child.key ? { borderRight: '4px solid #065F46' } : {}
+        }))
+      }))}
       style={{ backgroundColor: "#FFFFFF", fontWeight: "500" }}
     />
   );

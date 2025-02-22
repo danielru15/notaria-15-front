@@ -10,7 +10,7 @@ export const useAllCasosRentas = (estado: string = "activo") => {
 
     const fetchCasoRentas = useCallback(async () => {
         try {
-            const { data } = await notaria15Api.get<CasoRentasResponse[]>(`/caso-rentas/?estado=activo`);
+            const { data } = await notaria15Api.get<CasoRentasResponse[]>(`/caso-rentas/`);
            
             setCasosRentas(data);
         } catch (err: any) {
