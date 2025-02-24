@@ -1,10 +1,10 @@
 import  { useState } from 'react';
-import { Button, Space, Table, TableProps, Modal, Input, Tag } from "antd";
+import { Button, Space,  TableProps, Modal, Input, Tag } from "antd";
 import { useFetchUsers } from "../../hooks/users/useAllUsers";
 import CardContainer from "../CardContainer/CardContainer";
 import { User } from "../../interfaces/user.interface";
 import { useDeleteUser } from "../../hooks/users/deleteUser";
-import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, FilterFilled, FilterOutlined, SearchOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, ExclamationCircleFilled, FilterFilled} from "@ant-design/icons";
 import EditUserDrawer from "./EditUser";
 import ProtectedRoutes from '../protectRoutes/ProtectRoutes';
 import { useAuth } from '../../hooks/users/useAuth';
