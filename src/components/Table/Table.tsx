@@ -1,7 +1,7 @@
 import { Table } from 'antd';
 import { useState } from 'react'
 
-const ReusableTable = ({columns, dataSource, rowClassName}:any) => {
+const ReusableTable = ({columns, dataSource, rowClassName}:any ) => {
     const [pageSize, setPageSize] = useState<number>(5);
     const [currentPage, setCurrentPage] = useState<number>(1);
 

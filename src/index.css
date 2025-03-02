@@ -99,3 +99,14 @@ body {
 
 
 
+.table-rentas-registro .ant-table-container  {
+  border-left: 0 ;
+  border-right: 0 !important;
+}
+
+
+.facturas-table .ant-table-thead > tr > th {
+  background-color: #cdcdcd;
+  font-weight: bold;
+  color: black;
+}

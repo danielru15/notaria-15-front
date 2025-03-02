@@ -1,22 +1,29 @@
 import { createContext, useContext, useState} from "react";
 import { EscrituraResponse } from "../interfaces/escrituras.interface";
 import { CasoRentasResponse } from "../interfaces/casoRentas.interface";
+import { RentasYRegistroResponse } from "../interfaces/rentasYregistro.interface";
+import { Facturas } from "../interfaces/facturas.interface";
 
 interface DatosContextType {
     escrituras: EscrituraResponse[];
-    setEscrituras: (escrituras: EscrituraResponse[]) => void;
+    setEscrituras: (escrituras: EscrituraResponse[]) => void
     casosRentas:CasoRentasResponse[]
     setCasosRentas: (casosRentas:CasoRentasResponse[]) => void
+    rentas_y_Registro:RentasYRegistroResponse[]
+    setRentas_y_Registro: (rentas_y_Registro:RentasYRegistroResponse[]) => void
+    facturas:Facturas[], 
+    setFacturas: (facturas:Facturas[]) => void
 }
 
 const DatosContext = createContext<DatosContextType | undefined>(undefined);
 
 export const DatosProvider = ({ children }: { children: React.ReactNode }) => {
-  const [escrituras, setEscrituras] = useState<EscrituraResponse[]>([]);
-  const [casosRentas, setCasosRentas] = useState<CasoRentasResponse[]> ([]);
-
+    const [casosRentas, setCasosRentas] = useState<CasoRentasResponse[]> ([]);
+    const [rentas_y_Registro, setRentas_y_Registro] = useState<RentasYRegistroResponse[]> ([]);
+    const [escrituras, setEscrituras] = useState<EscrituraResponse[]>([]);
+    const [facturas, setFacturas] = useState<Facturas[]>([]);
     return (
-        <DatosContext.Provider value={{escrituras, setEscrituras, casosRentas, setCasosRentas }}>
+        <DatosContext.Provider value={{escrituras, setEscrituras, casosRentas, setCasosRentas, rentas_y_Registro, setRentas_y_Registro, facturas, setFacturas }}>
             {children}
         </DatosContext.Provider>
     );

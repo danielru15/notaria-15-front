@@ -51,11 +51,12 @@ const App = () => {
             headerColor:"white",
             rowHoverBg:"#D1FAE5",
             borderColor:"#afafaf",
-            cellFontSize:16,
-            headerBorderRadius:0
+            cellFontSize:14,
+            headerBorderRadius:0,
+          
           },
           Menu: {
-            colorBgContainer: "#F0FFF4",
+            colorBgContainer: "#1a1c1a",
             colorBgTextHover: "#D1FAE5",
             itemActiveBg:"#16A34A",
             itemBorderRadius:0,
