@@ -6,9 +6,10 @@ import Login from "./pages/login/login";
 import { useAuth } from "./hooks/users/useAuth";
 import "./index.css";
 import RentasyRegistro from "./pages/rentasyregistro/RentasyRegistro";
+import { Home } from "./pages/Home/Home";
 
 const App = () => {
-  const {  loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) {
     return <div>Cargando...</div>;
@@ -44,34 +45,35 @@ const App = () => {
             colorPrimaryHover: "#34D399",
           },
           Dropdown: {
-            controlItemBgHover:"#D1FAE5",
+            controlItemBgHover: "#D1FAE5",
           },
           Table: {
-            headerBg:"#16A34A",
-            headerColor:"white",
-            rowHoverBg:"#D1FAE5",
-            borderColor:"#afafaf",
-            cellFontSize:14,
-            headerBorderRadius:0,
-          
+            headerBg: "#16A34A",
+            headerColor: "white",
+            rowHoverBg: "#D1FAE5",
+            borderColor: "#afafaf",
+            cellFontSize: 14,
+            headerBorderRadius: 0,
+
           },
           Menu: {
             colorBgContainer: "#1a1c1a",
             colorBgTextHover: "#D1FAE5",
-            itemActiveBg:"#16A34A",
-            itemBorderRadius:0,
-            
+            itemActiveBg: "#16A34A",
+            itemBorderRadius: 0,
+
           },
           Pagination: {
-            itemActiveBg: "#34d399c3", 
-            itemSize: 36, 
-            colorBgTextHover: "#D1FAE5", 
-            itemBg:'#D1FAE5'
+            itemActiveBg: "#34d399c3",
+            itemSize: 36,
+            colorBgTextHover: "#D1FAE5",
+            itemBg: '#D1FAE5'
           }
         },
       }}
     >
       <Routes>
+        <Route path="/home" element={<Home />} />
         <Route path="/usuarios" element={<UsuariosPage />} />
         <Route path="/caso-rentas" element={<CaseRentesPage />} />
         <Route path="/rentas-y-registro" element={<RentasyRegistro />} />
