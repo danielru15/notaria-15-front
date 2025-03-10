@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (location.pathname === "/login") {
       if (user) {
-        navigate("/usuarios", { replace: true });
+        navigate("/home", { replace: true });
       }
       setLoading(false);
       return;
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
    
 
-      navigate("/usuarios", { replace: true });
+      navigate("/home", { replace: true });
     } catch {
       setError("No se pudo iniciar sesión. Verifica tus credenciales.");
     }

@@ -1,15 +1,18 @@
-import { Table, TableProps, Tag } from "antd";
+import { Button, Space, Table, TableProps, Tag } from "antd";
 import CardContainer from "../CardContainer/CardContainer";
 import { useAllRentasYregistro } from "../../hooks/rentasyregistro/useAllRentasyRegistro";
-import { FilterFilled } from "@ant-design/icons";
+import { EditOutlined, FilterFilled } from "@ant-design/icons";
 import { formatCurrency, formatNumber } from "../../utils/FormatCurrency";
 import { RentasYRegistroResponse } from "../../interfaces/rentasYregistro.interface";
 import FacturasTable from "./FacturasTable";
+import { useState } from "react";
+import EditRentasRegistroDrawer from "./EditRentasyRegistro";
 
 
 const ListRyR = () => {
   const { rentas_y_Registro } = useAllRentasYregistro();
-  
+    const [selectedRentasRegistro, setSelectedRentasRegistro] = useState<RentasYRegistroResponse | null>(null);
+
 
   const RentasYregistro_columns: TableProps<RentasYRegistroResponse>["columns"] = [
     {
@@ -69,7 +72,7 @@ const ListRyR = () => {
       render: (value) => <span style={{ fontWeight: "bold" }}>{formatCurrency(value)}</span>,
     },
     {
-      title: "Total facturas sin cancelar",
+      title: "Total Facturas Sin Cancelar",
       dataIndex: "total_facturas_sin_cancelar",
       key: "total_facturas_sin_cancelar",
       render: (value) => <span style={{ fontWeight: "bold" }}>{formatCurrency(value)}</span>,
@@ -81,7 +84,7 @@ const ListRyR = () => {
       render: (value) => <span style={{ fontWeight: "bold" }}>{formatCurrency(value)}</span>,
     },
     {
-      title: "Metodo pago rentas",
+      title: "Método Pago Rentas",
       dataIndex: "metodo_pago_rentas",
       key: "metodo_pago_rentas",
       filterSearch: true,
@@ -140,11 +143,25 @@ const ListRyR = () => {
       render: (value) => <span style={{ fontWeight: "bold" }}>{formatCurrency(value)}</span>,
     },
     {
-      title: "observaciones",
+      title: "Observaciones",
       dataIndex: "observaciones",
       key: "observaciones",
     },
-  ];
+    {
+      title: "Acciones",
+      key: "acciones",
+      fixed: "right",
+      render: (_, record: RentasYRegistroResponse) => (
+        <Space>
+          <Button  icon={<EditOutlined />} onClick={() => setSelectedRentasRegistro(record)}>
+            Editar
+          </Button>
+        
+        </Space>
+      ),
+    },
+];
+
 
 
 
@@ -161,13 +178,14 @@ const ListRyR = () => {
     <CardContainer title="LISTA DE RENTAS Y REGISTRO">
       <Table
         columns={RentasYregistro_columns}
-        expandable={{expandedRowClassName:'facturas-table',expandRowByClick:true, expandedRowRender, defaultExpandedRowKeys: ["0"] }}
+        expandable={{expandedRowClassName:'facturas-table', expandedRowRender, defaultExpandedRowKeys: ["0"] }}
         dataSource={rentas_y_Registro}
         scroll={{ x: "max-content" }}
         rowKey={(record) => record.id}
         bordered={true}  
         className="table-rentas-registro"
       />
+      <EditRentasRegistroDrawer rentasRegistro={selectedRentasRegistro} onClose={() => setSelectedRentasRegistro(null)}  />
     </CardContainer>
   );
 };

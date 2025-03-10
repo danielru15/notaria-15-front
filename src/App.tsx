@@ -6,6 +6,7 @@ import Login from "./pages/login/login";
 import { useAuth } from "./hooks/users/useAuth";
 import "./index.css";
 import RentasyRegistro from "./pages/rentasyregistro/RentasyRegistro";
+import { Home } from "./pages/home/Home";
 
 const App = () => {
   const {  loading } = useAuth();
@@ -75,6 +76,7 @@ const App = () => {
         <Route path="/usuarios" element={<UsuariosPage />} />
         <Route path="/caso-rentas" element={<CaseRentesPage />} />
         <Route path="/rentas-y-registro" element={<RentasyRegistro />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </ConfigProvider>
