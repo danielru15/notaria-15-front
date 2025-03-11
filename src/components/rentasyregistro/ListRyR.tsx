@@ -13,7 +13,7 @@ const ListRyR = () => {
   const { rentas_y_Registro } = useAllRentasYregistro();
     const [selectedRentasRegistro, setSelectedRentasRegistro] = useState<RentasYRegistroResponse | null>(null);
 
-
+console.log(rentas_y_Registro)
   const RentasYregistro_columns: TableProps<RentasYRegistroResponse>["columns"] = [
     {
       title: "Número de Escritura",
@@ -126,6 +126,12 @@ const ListRyR = () => {
     },
     {
       title: "Total RyR",
+      dataIndex: "total_ryr",
+      key: "total_ryr",
+      render: (value) => <span style={{ fontWeight: "bold" }}>{formatCurrency(value)}</span>,
+    },
+    {
+      title: "devoluciones",
       dataIndex: "devoluciones",
       key: "devoluciones",
       render: (value) => <span style={{ fontWeight: "bold" }}>{formatCurrency(value)}</span>,
