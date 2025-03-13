@@ -31,6 +31,7 @@ const menuItems = [
       { key: "/rentas-y-registro", label: <NavLink to="/rentas-y-registro">RyR</NavLink> },
       { key: "/data", label: <NavLink to="/informe-notario">Informe Notario</NavLink> },
       { key: "campo-disponible", label: "Infome Facturacion" },
+      { key: "/cliente", label: <NavLink to="/clientes">Cliente</NavLink> }
     ],
   }
 ];
