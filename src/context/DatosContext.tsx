@@ -12,7 +12,9 @@ interface DatosContextType {
     rentas_y_Registro:RentasYRegistroResponse[]
     setRentas_y_Registro: (rentas_y_Registro:RentasYRegistroResponse[]) => void
     facturas:Facturas[], 
-    setFacturas: (facturas:Facturas[]) => void
+    setFacturas: (facturas:Facturas[]) => void,
+    casosRentasFilter:CasoRentasResponse[],
+     setCasosRentasFilter:(casosRentasFilter:CasoRentasResponse[]) => void
 }
 
 const DatosContext = createContext<DatosContextType | undefined>(undefined);
@@ -22,8 +24,9 @@ export const DatosProvider = ({ children }: { children: React.ReactNode }) => {
     const [rentas_y_Registro, setRentas_y_Registro] = useState<RentasYRegistroResponse[]> ([]);
     const [escrituras, setEscrituras] = useState<EscrituraResponse[]>([]);
     const [facturas, setFacturas] = useState<Facturas[]>([]);
+    const [casosRentasFilter, setCasosRentasFilter] = useState<CasoRentasResponse[]>([]);
     return (
-        <DatosContext.Provider value={{escrituras, setEscrituras, casosRentas, setCasosRentas, rentas_y_Registro, setRentas_y_Registro, facturas, setFacturas }}>
+        <DatosContext.Provider value={{escrituras, setEscrituras, casosRentas, setCasosRentas, rentas_y_Registro, setRentas_y_Registro, facturas, setFacturas , casosRentasFilter, setCasosRentasFilter}}>
             {children}
         </DatosContext.Provider>
     );

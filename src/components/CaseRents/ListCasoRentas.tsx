@@ -10,6 +10,7 @@ import ReusableTable from "../Table/Table";
 import { formatNumber } from "../../utils/FormatCurrency";
 import { sendEmail } from "../../hooks/sendEmail/useSendEmail";
 import dayjs from "dayjs";
+import { getBoletaUrl } from "../../utils/rentasyregistroUtils";
 
 const ListCasoRentas = () => {
   const { user } = useAuth();
@@ -23,9 +24,7 @@ const ListCasoRentas = () => {
   };
 
 
-const getBoletaUrl = (radicado: string) => {
-  return `https://mercurio.antioquia.gov.co/mercurio/servlet/ControllerMercurio?command=anexos&tipoOperacion=abrirLista&idDocumento=${radicado}&tipDocumento=R&now=${Date.now()}&ventanaEmergente=S&origen=NTR`;
-};
+
 
 
 ; 

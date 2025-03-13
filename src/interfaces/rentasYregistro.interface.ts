@@ -16,13 +16,23 @@ export interface RentasYRegistroResponse {
     total_rentasyregistro: number;
 }
 
-export interface RentasYRegistro {
-  valor_rentas: number;
-  metodo_pago_rentas: "efectivo" | "pse";
-  valor_registro: number;
-  metodo_pago_registro: "efectivo" | "pse";
-  devoluciones: number;
-  excedentes: number;
-  observaciones: string;
 
+
+
+export interface Factura {
+  numero_factura: string;
+  valor: number;
+  estado: "cancelado" | "sin cancelar";
+}
+
+export interface RentasYRegistro {
+  escritura_id?: number;
+  valor_rentas: number;
+  metodo_pago_rentas: "pse" | "efectivo";
+  valor_registro: number;
+  metodo_pago_registro: "pse" | "efectivo";
+  fecha?: string;
+  devoluciones?: number;
+  excedentes?: number;
+  facturas?: Factura[];
 }

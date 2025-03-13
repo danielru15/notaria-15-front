@@ -187,7 +187,7 @@ const EditCasoRentasDrawer: React.FC<EditCasoRentasDrawerProps> = ({ casoRenta, 
           </Col>
           <Col span={12}>
             <Form.Item name="observaciones" label="Observaciones">
-              <Input.TextArea rows={2} />
+              <Input.TextArea rows={2}  />
             </Form.Item>
           </Col>
         </Row>

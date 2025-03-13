@@ -13,7 +13,7 @@ const ListRyR = () => {
   const { rentas_y_Registro } = useAllRentasYregistro();
     const [selectedRentasRegistro, setSelectedRentasRegistro] = useState<RentasYRegistroResponse | null>(null);
 
-console.log(rentas_y_Registro)
+
   const RentasYregistro_columns: TableProps<RentasYRegistroResponse>["columns"] = [
     {
       title: "Número de Escritura",
@@ -190,6 +190,7 @@ console.log(rentas_y_Registro)
         rowKey={(record) => record.id}
         bordered={true}  
         className="table-rentas-registro"
+        pagination={{ pageSize: 4 }}
       />
       <EditRentasRegistroDrawer rentasRegistro={selectedRentasRegistro} onClose={() => setSelectedRentasRegistro(null)}  />
     </CardContainer>

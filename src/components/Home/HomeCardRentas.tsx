@@ -1,45 +1,60 @@
 import { useEffect, useState } from "react";
-import { Card, Button, Select, Tag} from "antd";
-import { CasoRentasResponse } from "../../interfaces/casoRentas.interface";
+import { Card, Button, Tag, Select } from "antd";
 import ReusableTable from "../../components/Table/Table";
-import { EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { useDatos } from "../../context/DatosContext";
-import { useFilteredUsers } from "../../hooks/users/useAllUsersCargo";
+import {  FileExcelOutlined, FilePdfOutlined } from "@ant-design/icons";
 import { useAuth } from "../../hooks/users/useAuth";
+import { getBoletaUrl } from "../../utils/rentasyregistroUtils";
+import { useAllCasosRentas } from "../../hooks/casoRentas/useAllCasosRentas";
+import { descargarInforme } from "../../utils/excel.util";
+import dayjs from "dayjs";
+import { formatNumber } from "../../utils/FormatCurrency";
+
+const { Option } = Select;
 
 const HomeCardRentas = () => {
-    const {casosRentas} = useDatos()
-    const [casos, setCasos] = useState<CasoRentasResponse[]>([]);
-    const [filter, setFilter] = useState();
-     const { user } = useAuth();
-const { filteredUsers: protocolistas } = useFilteredUsers("Protocolista");
+    type FilteredCaso = {
+        numero_escritura: string;
+        estado: string;
+        radicado: string;
+    };
+
+    const [filteredCasos, setFilteredCasos] = useState<FilteredCaso[]>([]);
+    const [filter, setFilter] = useState<string | null>(null);
+    const { casosRentas } = useAllCasosRentas();
+    const { user } = useAuth();
+    const fechaActual = dayjs().format("DD-MM-YYYY");
 
     useEffect(() => {
-        if (filter === '' ) {
-            setCasos(casosRentas);
-        } else {
-            setCasos(casosRentas.filter((caso) => caso.user_id === user?.id));
+        if (casosRentas.length && user) {
+            let casosFiltrados = casosRentas.filter(caso => caso.user_id === user.id);
+            if (filter) {
+                casosFiltrados = casosFiltrados.filter(caso => caso.estado === filter);
+            }
+            setFilteredCasos(
+                casosFiltrados.map(({ numero_escritura, estado, radicado }) => ({
+                    numero_escritura,
+                    estado,
+                    radicado
+                }))
+            );
         }
-    }, [casosRentas, user?.id]);
+    }, [casosRentas, user?.id, filter]);
 
     const columns = [
         {
             title: "Número Escritura",
             dataIndex: "numero_escritura",
             key: "numeroEscritura",
-        }
-        ,
+             render: (value:string) => formatNumber(Number(value))
+        },
         {
             title: "Estado",
             dataIndex: "estado",
             key: "estado",
-            filters: [
-                { text: "Activos", value: "activo" },
-                { text: "Finalizados", value: "finalizado" },
-            ],
-            onFilter: (value:any, record:any) => record.estado === value,
-            render: (estado:any) => (
-                <Tag color={estado === "activo" ? "green" : "red"}>{estado.toUpperCase()}</Tag>
+            render: (estado: any) => (
+                <Tag color={estado === "activo" ? "green" : "red"}>
+                    {estado.toUpperCase()}
+                </Tag>
             ),
         },
         {
@@ -50,32 +65,46 @@ const { filteredUsers: protocolistas } = useFilteredUsers("Protocolista");
         {
             title: "Acciones",
             key: "acciones",
-            render: (_:any, record:any) => (
-                <div>
-                    <Button type="link" href={`/caso-rentas/${record.radicado}`} icon={<EyeOutlined />}>Ver</Button>
-                    <Button type="link" href={`/caso-rentas/editar/${record.radicado}`} icon={<EditOutlined />}>Editar</Button>
-                </div>
+            render: (_: any, record: any) => (
+                <Button
+                
+                    href={getBoletaUrl(record.radicado)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    icon={<FilePdfOutlined />}
+                >
+                    Ver
+                </Button>
             ),
         },
     ];
 
     return (
-        <Card title="Casos de Rentas" extra={<Button href="/caso-rentas">Ver Más</Button>}>
-           <Select onChange={setFilter} style={{ width: "100%", marginBottom: 10 }}
-                            showSearch
-                            placeholder="Seleccione un usuario"
-                            optionFilterProp="label"
-                            filterOption={(input, option) =>
-                              (option?.label as string)?.toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={protocolistas.map(user => ({
-                              value: user.id,
-                              label: `${user.name.toUpperCase()} ${user.last_name.toUpperCase()}`,
-                            }))}
-                          />
-            
-                <ReusableTable dataSource={casos} columns={columns} rowKey={(record:any) => record.radicado} pagination={{ pageSize: 5 }} />
-            
+        <Card 
+            title="Casos de Rentas" 
+            extra={
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Select
+                        placeholder="Filtrar por estado"
+                        onChange={(value) => setFilter(value)}
+                        allowClear
+                        style={{ width: 150 }}
+                    >
+                        <Option value="activo">Activos</Option>
+                        <Option value="finalizado">Finalizados</Option>
+                    </Select>
+                    <Button type="primary"  icon={<FileExcelOutlined />} onClick={() => descargarInforme(fechaActual, filteredCasos)}>
+                        Descargar Informe
+                    </Button>
+                </div>
+            }
+        >
+            <ReusableTable 
+                dataSource={filteredCasos} 
+                columns={columns} 
+                rowKey={(record: any) => record.radicado} 
+                pagination={{ pageSize: 5 }} 
+            />
         </Card>
     );
 };

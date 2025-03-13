@@ -7,6 +7,7 @@ import { useAuth } from "./hooks/users/useAuth";
 import "./index.css";
 import RentasyRegistro from "./pages/rentasyregistro/RentasyRegistro";
 import { Home } from "./pages/home/Home";
+import InformeNotario from "./pages/rentasyregistro/InformeNotario";
 
 const App = () => {
   const {  loading } = useAuth();
@@ -76,6 +77,7 @@ const App = () => {
         <Route path="/usuarios" element={<UsuariosPage />} />
         <Route path="/caso-rentas" element={<CaseRentesPage />} />
         <Route path="/rentas-y-registro" element={<RentasyRegistro />} />
+        <Route path="/informe-notario" element={<InformeNotario />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
       </Routes>
